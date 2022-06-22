@@ -1,25 +1,28 @@
-const express=require("express");
-const bodyParser=require("body-parser");
-const mongoose=require("mongoose");
-const PORT=2500;
-const app=express();
-app.use(bodyParser.json());
-app.listen(PORT,()=>{
-    console.log("Runining...........");
-})
+const express = require("express");
+const bodyParser = require("body-parser");
+const dotenv = require('dotenv').config({path: './config/.env'});
+const app = express();
+const dbConnection = require('./config/db_connection');
+
 //requiring user routes 
-const {userRoutes}=require("./routes/userRoutes")
-const URL="mongodb+srv://Brainiacs_user:jPxVoB5sOM4UdVq1@cluster0.wmwkp.mongodb.net/test";
-//mongodb://localhost:27017/databaseName
-//db connection
-const dbConnection=()=>{
-    mongoose.connect(URL,()=>{
-        console.log("Db connected......................");
-    })
-}
+const {userRoutes}=require("./routes/userRoutes");
+
+//swagger conf
+const swaggerUi = require('swagger-ui-express'),swaggerDocument = require('./swagger.json');
+
+//running db connection function
 dbConnection();
 
-const swaggerUi = require('swagger-ui-express'),swaggerDocument = require('./swagger.json');
+//used middlewares
+app.use(bodyParser.json());
+app.use(
+  '/api-docs',
+  swaggerUi.serve, 
+  swaggerUi.setup(swaggerDocument)
+);
+app.use("/user",userRoutes);
+
+
 
 //CRUD
 //C: create httpMethod: post, 
@@ -27,13 +30,12 @@ const swaggerUi = require('swagger-ui-express'),swaggerDocument = require('./swa
 //U: update httpMethod: put,
 //D: delete httpMethod: delete, 
 
-//    /=> localhost:2500;
 app.get("/",(req,res)=>{
   return  res.send("welcome to brainiacs")
-})
-app.use(
-    '/api-docs',
-    swaggerUi.serve, 
-    swaggerUi.setup(swaggerDocument)
-  );
-app.use("/user",userRoutes)
+});
+
+
+
+app.listen(process.env.PORT,()=>{
+  console.log("Runining...........");
+});

@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+
+//defining user schema
 const userSchema = new mongoose.Schema({
     fname: {
         type: String,
@@ -21,4 +23,5 @@ const userSchema = new mongoose.Schema({
         max: 30
     },
 })
+
 module.exports.usersSchema = mongoose.model("users", userSchema);
