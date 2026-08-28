@@ -4,8 +4,8 @@
   "description": "brainiacs backend demo",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app.js",
-    "start": "set NODE_ENV=production && node app.js"
+    "dev": "node api.js && nodemon app.js",
+    "start": "node api.js && set NODE_ENV=production && node app.js"
   },
   "author": "Prec",
   "license": "ISC",
